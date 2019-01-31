@@ -11,3 +11,4 @@ H:\EigeneDaten\Visual Studio 2015\Projects\MedianFilter\obj\Debug\MedianFilter.P
 H:\EigeneDaten\Visual Studio 2015\Projects\MedianFilter\obj\Debug\MedianFilterProject.csproj.GenerateResource.Cache
 H:\EigeneDaten\Visual Studio 2015\Projects\MedianFilter\obj\Debug\MedianFilter.exe
 H:\EigeneDaten\Visual Studio 2015\Projects\MedianFilter\obj\Debug\MedianFilter.pdb
+H:\EigeneDaten\Visual Studio 2015\Projects\MedianFilter\obj\Debug\MedianFilterProject.csprojResolveAssemblyReference.cache

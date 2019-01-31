@@ -1,5 +1,12 @@
 ﻿using Microsoft.Win32;
 using System.Windows;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System;
+using System.Windows.Media;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
+using MedianFilter;
 
 namespace MedianFilterProject
 {
@@ -8,17 +15,16 @@ namespace MedianFilterProject
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
-        {
+        {   
             InitializeComponent();
-        }
+            DataContext = new MedianFilterViewModel();
+        } 
 
         private void open_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files(*.BMP; *.JPG; *.GIF)| *.BMP; *.JPG; *.GIF";
-                   openFileDialog.ShowDialog();
-                //txtEditor.Text = File.ReadAllText(openFileDialog.FileName);
+           
         }
     }
 }
