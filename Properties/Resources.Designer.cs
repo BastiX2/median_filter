@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MedianFilter.Properties
+namespace MedianFilterProject.Properties
 {
 
 

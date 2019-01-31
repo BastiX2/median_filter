@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WPFProbeklausur
+namespace MedianFilterProject
 {
     public class RelayCommand : ICommand
     {

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MedianFilter
+namespace MedianFilterProject
 {
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
@@ -23,6 +25,13 @@ namespace MedianFilter
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void open_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.ShowDialog();
+                //txtEditor.Text = File.ReadAllText(openFileDialog.FileName);
         }
     }
 }
