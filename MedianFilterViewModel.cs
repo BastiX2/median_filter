@@ -70,17 +70,34 @@ namespace MedianFilterProject
             {
                 if (displayNewBitmap == null)
                 {
-                    displayNewBitmap = new RelayCommand(DisplayNewBitmap, param => CanExecuteCalculation(param));
+                    displayNewBitmap = new RelayCommand(DisplayNewBitmap, param => CanDisplayBitmap(param));
                 }
                 return displayNewBitmap;
             }
 
         }
 
+        private ICommand saveNewBitmap = null;
+
+        public ICommand SaveNewBitmapCommand
+        {
+            get
+            {
+                if (saveNewBitmap == null)
+                {
+                    saveNewBitmap = new RelayCommand(SaveBitmap, param => CanSaveBitmap(param));
+                }
+                return saveNewBitmap;
+            }
+
+        }
+
+
+
         private void DisplayNewBitmap(Object obj)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files(*.BMP; *.JPG; *.GIF)| *.BMP; *.JPG; *.GIF";
+            openFileDialog.Filter = "Image Files(*.BMP; *.JPG; *.GIF; *.PNG)| *.BMP; *.JPG; *.GIF; *.PNG";
             openFileDialog.ShowDialog();
             Bitmap bitmap = new Bitmap(openFileDialog.FileName);
 
@@ -88,7 +105,31 @@ namespace MedianFilterProject
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalImageSource"));
         }
 
-        private bool CanExecuteCalculation(object param)
+        private void SaveBitmap(Object obj)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Image Files(*.BMP; *.JPG; *.GIF; *.PNG)| *.BMP; *.JPG; *.GIF; *.PNG";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    OriginalBitmap.Save(@"H:\Desktop\new.bmp");
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
+        }
+
+
+        private bool CanDisplayBitmap(object param)
+        {
+            return true;
+        }
+
+        private bool CanSaveBitmap(object param)
         {
             return true;
         }
