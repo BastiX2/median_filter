@@ -1,0 +1,27 @@
+﻿<Window x:Class="MedianFilter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MedianFilter"
+        mc:Ignorable="d"
+        Title="Median Filter" Height="350" Width="525">
+    <Grid Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50px" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50px" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Row="0" Grid.Column="0" x:Name="open" Content="Open File" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Top" Width="75"/>
+        <Button Grid.Row="0" Grid.Column="1" x:Name="save" Content="Save File" HorizontalAlignment="Right" Margin="10,10,10,10" VerticalAlignment="Top" Width="75"/>
+        <Button Grid.Row="2" Grid.Column="1" x:Name="apply" Content="Apply" HorizontalAlignment="Right" Margin="10,10,10,10" Width="100px" Click="button1_Click"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="comboBox" HorizontalAlignment="Left" Margin="10,10,10,10" Width="120"/>
+        <Image Grid.Row="1" Grid.Column="0" x:Name="image_original" HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto"/>
+        <Image Grid.Row="1" Grid.Column="1" x:Name="image_filter" HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto"/>
+
+    </Grid>
+</Window>
