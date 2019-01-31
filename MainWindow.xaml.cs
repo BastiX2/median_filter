@@ -22,9 +22,5 @@ namespace MedianFilterProject
             DataContext = new MedianFilterViewModel();
         } 
 
-        private void open_Click(object sender, RoutedEventArgs e)
-        {
-           
-        }
     }
 }

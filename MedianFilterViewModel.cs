@@ -14,14 +14,23 @@ namespace MedianFilterProject
     class MedianFilterViewModel : INotifyPropertyChanged
     {
 
+        private int filterSelectedValue;
+
+        public int FilterSelectedValue
+        {
+            get { return filterSelectedValue; }
+            set { filterSelectedValue = value; }
+        }
+
+
         private ImageSource originalImageSource;
 
         public ImageSource OriginalImageSource
         {
             get { return originalImageSource; }
             set {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalImageSource"));
                 originalImageSource = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalImageSource"));
             }
         }
 
@@ -30,15 +39,10 @@ namespace MedianFilterProject
         public ImageSource FilteredImageSource
         {
             get { return filteredImageSource; }
-            set { filteredImageSource = value; }
-        }
-
-        private string newFilePath;
-
-        public string NewFilePath
-        {
-            get { return newFilePath; }
-            set { newFilePath = value; }
+            set {
+                filteredImageSource = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredImageSource"));
+            }
         }
 
         private Bitmap originalBitmap;
@@ -59,7 +63,10 @@ namespace MedianFilterProject
         public Bitmap FilteredBitmap
         {
             get { return filteredBitmap; }
-            set { filteredBitmap = value; }
+            set {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredBitmap"));
+                filteredBitmap = value;
+            }
         }
 
         private ICommand displayNewBitmap = null;
@@ -77,15 +84,30 @@ namespace MedianFilterProject
 
         }
 
+        private ICommand filterBitmapCommand;
+
+        public ICommand FilterBitmapCommand
+        {
+            get { return filterBitmapCommand; }
+            set {
+                filterBitmapCommand = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredBitmap"));              
+            }
+        }
+
+
         private void DisplayNewBitmap(Object obj)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files(*.BMP; *.JPG; *.GIF)| *.BMP; *.JPG; *.GIF";
             openFileDialog.ShowDialog();
-            Bitmap bitmap = new Bitmap(openFileDialog.FileName);
+            OriginalBitmap = new Bitmap(openFileDialog.FileName);
+            OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
 
-            OriginalImageSource = BitmapConverter.ImageSourceForBitmap(bitmap);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalImageSource"));
+            FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap);
+            FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
+
+            MessageBox.Show("Wert: "+filterSelectedValue);
         }
 
         private bool CanExecuteCalculation(object param)
