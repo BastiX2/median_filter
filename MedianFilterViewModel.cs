@@ -14,14 +14,6 @@ namespace MedianFilterProject
     class MedianFilterViewModel : INotifyPropertyChanged
     {
 
-        private string originalFilePath;
-
-        public string OriginalFilePath
-        {
-            get { return originalFilePath; }
-            set { originalFilePath = value; }
-        }
-
         private ImageSource originalImageSource;
 
         public ImageSource OriginalImageSource
@@ -90,7 +82,6 @@ namespace MedianFilterProject
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files(*.BMP; *.JPG; *.GIF)| *.BMP; *.JPG; *.GIF";
             openFileDialog.ShowDialog();
-
             Bitmap bitmap = new Bitmap(openFileDialog.FileName);
 
             OriginalImageSource = BitmapConverter.ImageSourceForBitmap(bitmap);
