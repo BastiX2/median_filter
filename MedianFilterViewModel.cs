@@ -117,8 +117,10 @@ namespace MedianFilterProject
         private void DisplayNewBitmap(Object obj)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
             openFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
             openFileDialog.ShowDialog();
+
             try
             {
                 OriginalBitmap = new Bitmap(openFileDialog.FileName);
@@ -147,11 +149,8 @@ namespace MedianFilterProject
             {
                 FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap);
                 FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
-
                 MessageBox.Show("Wert: " + filterSelectedValue);
             }
-            
-         
         }
 
         private void SaveBitmap(Object obj)
