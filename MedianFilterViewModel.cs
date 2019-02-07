@@ -138,7 +138,7 @@ namespace MedianFilterProject
                 MessageBox.Show("Bitte ein Bild öffnen!");
             } else
             {
-                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap);
+                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap, filterSelectedValue);
                 FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
 
                 MessageBox.Show("Wert: " + filterSelectedValue);
