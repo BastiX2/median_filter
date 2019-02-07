@@ -3,37 +3,54 @@ using System.Windows;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System;
-
+using System.Collections.Generic;
 
 namespace MedianFilterProject
 {
     class MedianFilter
     {
-        public static Bitmap FilterBitmap(Bitmap bitmap)
+
+
+        public static Bitmap FilterBitmap(Bitmap bitmap, int filterStrength)
         {
-            Bitmap filteredBitmap = new Bitmap(bitmap);
-            for (int y = 0; y < bitmap.Height; y++)
+            Bitmap filteredBitmap = (Bitmap)bitmap.Clone();
+            var termsList = new List<Color>();
+            Color c;
+
+            // Durchläuft alle Pixel in der Bitmap
+            for (int i = 0; i <= filteredBitmap.Width - filterStrength; i++)
             {
-                for (int x = 0; x < bitmap.Width; x++)
+                for (int j = 0; j <= filteredBitmap.Height - filterStrength; j++)
                 {
-                    var oldColor = bitmap.GetPixel(x, y);
-                    var newColor = DarkenColor(oldColor, 0.5);
-                    filteredBitmap.SetPixel(x, y, newColor);
+
+                    // Durchläuft X pixel um Zielpixel
+                    for (int x = i; x < i + filterStrength; x++)
+                    {
+                        for (int y = j; y < j + filterStrength; y++)
+                        {
+                            // Fügt die Pixel der Liste hinzu
+                            c = filteredBitmap.GetPixel(x, y);
+                            termsList.Add(c);
+                        }
+                    }
+                    // Pixel werden in Array gespeichert
+                    var terms = new List<Color>(termsList);
+                    //Liste wird geleert
+                    termsList.Clear();
+
+                    terms.Sort((color1, color2) =>
+                    (color1.GetBrightness()).CompareTo(color2.GetBrightness()));
+
+                    c = terms[terms.Count/2];
+
+                    filteredBitmap.SetPixel(i + 1, j + 1, c);
                 }
             }
+
             return filteredBitmap;
         }
 
-        public static Color DarkenColor(Color inColor, double lightenAmount)
-        {
-            return Color.FromArgb(
-              inColor.A,
-              (int)Math.Max(0, inColor.R - 255 * lightenAmount),
-              (int)Math.Max(0, inColor.G - 255 * lightenAmount),
-              (int)Math.Max(0, inColor.B - 255 * lightenAmount));
-        }
     }
-
 
 }
 

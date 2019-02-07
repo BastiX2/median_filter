@@ -51,8 +51,8 @@ namespace MedianFilterProject
         {
             get { return originalBitmap; }
             set {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalBitmap"));
                 originalBitmap = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalBitmap"));              
             }
         }
 
@@ -129,6 +129,7 @@ namespace MedianFilterProject
             {
                 MessageBox.Show(ae.Message);
             }
+
             OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
 
             // Bitmap ggf Zurücksetzen
@@ -142,14 +143,18 @@ namespace MedianFilterProject
 
         private void FilterBitmap(Object obj)
         {
-            if(originalBitmap == null)
+            if (OriginalBitmap == null)
             {
                 MessageBox.Show("Bitte ein Bild öffnen!");
             } else
             {
-                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap);
+                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap, filterSelectedValue);
                 FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
+<<<<<<< HEAD
                 MessageBox.Show("Wert: " + filterSelectedValue);
+=======
+                MessageBox.Show("Dein Bild ist fertig!");
+>>>>>>> b31e7c1cadf09d6940c64eae050a834a57799c3d
             }
         }
 
