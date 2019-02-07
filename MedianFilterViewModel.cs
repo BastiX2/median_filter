@@ -14,7 +14,7 @@ namespace MedianFilterProject
     class MedianFilterViewModel : INotifyPropertyChanged
     {
 
-        private int filterSelectedValue;
+        private int filterSelectedValue = 1;
 
         public int FilterSelectedValue
         {
@@ -63,9 +63,9 @@ namespace MedianFilterProject
         public Bitmap FilteredBitmap
         {
             get { return filteredBitmap; }
-            set {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredBitmap"));
+            set {   
                 filteredBitmap = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredBitmap"));
             }
         }
 
@@ -88,10 +88,13 @@ namespace MedianFilterProject
 
         public ICommand FilterBitmapCommand
         {
-            get { return filterBitmapCommand; }
-            set {
-                filterBitmapCommand = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredBitmap"));              
+            get
+            {
+                if (filterBitmapCommand == null)
+                {
+                    filterBitmapCommand = new RelayCommand(FilterBitmap, param => CanDisplayBitmap(param));
+                }
+                return filterBitmapCommand;
             }
         }
 
@@ -119,10 +122,29 @@ namespace MedianFilterProject
             OriginalBitmap = new Bitmap(openFileDialog.FileName);
             OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
 
-            FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap);
-            FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
+            // Bitmap ggf Zurücksetzen
+            if(FilteredBitmap != null)
+            {
+                FilteredBitmap = null;
+                FilteredImageSource = null;
+            }
 
-            MessageBox.Show("Wert: "+filterSelectedValue);
+        }
+
+        private void FilterBitmap(Object obj)
+        {
+            if(originalBitmap == null)
+            {
+                MessageBox.Show("Bitte ein Bild öffnen!");
+            } else
+            {
+                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap);
+                FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
+
+                MessageBox.Show("Wert: " + filterSelectedValue);
+            }
+            
+         
         }
 
         private void SaveBitmap(Object obj)

@@ -11,16 +11,17 @@ namespace MedianFilterProject
     {
         public static Bitmap FilterBitmap(Bitmap bitmap)
         {
+            Bitmap filteredBitmap = new Bitmap(bitmap);
             for (int y = 0; y < bitmap.Height; y++)
             {
                 for (int x = 0; x < bitmap.Width; x++)
                 {
                     var oldColor = bitmap.GetPixel(x, y);
                     var newColor = DarkenColor(oldColor, 0.5);
-                    bitmap.SetPixel(x, y, newColor);
+                    filteredBitmap.SetPixel(x, y, newColor);
                 }
             }
-            return bitmap;
+            return filteredBitmap;
         }
 
         public static Color DarkenColor(Color inColor, double lightenAmount)
