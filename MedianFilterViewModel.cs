@@ -8,6 +8,8 @@ using System.Windows.Interop;
 using System.ComponentModel;
 using System.Windows.Input;
 using MedianFilter;
+using System.IO;
+using System.Collections.Generic;
 
 namespace MedianFilterProject
 {
@@ -92,7 +94,8 @@ namespace MedianFilterProject
             {
                 if (filterBitmapCommand == null)
                 {
-                    filterBitmapCommand = new RelayCommand(FilterBitmap, param => CanDisplayBitmap(param));
+                    //filterBitmapCommand = new RelayCommand(FilterBitmap, param => CanDisplayBitmap(param));
+                    filterBitmapCommand = new RelayCommand(FilterBitmaps, param => CanDisplayBitmap(param));
                 }
                 return filterBitmapCommand;
             }
@@ -106,31 +109,51 @@ namespace MedianFilterProject
             {
                 if (saveNewBitmap == null)
                 {
-                    saveNewBitmap = new RelayCommand(SaveBitmap, param => CanSaveBitmap(param));
+                    //saveNewBitmap = new RelayCommand(SaveBitmap, param => CanSaveBitmap(param));
+                    saveNewBitmap = new RelayCommand(SaveBitmaps, param => CanSaveBitmap(param));
                 }
                 return saveNewBitmap;
             }
-
         }
+
+        private List<Bitmap> OriginalBitmaps = new List<Bitmap>();
+        private List<ImageSource> OriginalImageSources = new List<ImageSource>();
+        private List<Bitmap> FilteredBitmaps = new List<Bitmap>();
+        private List<ImageSource> FilteredImageSources = new List<ImageSource>();
+
+
 
 
         private void DisplayNewBitmap(Object obj)
         {
+            OriginalBitmaps.Clear();
+            OriginalImageSources.Clear();
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
+            // openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             openFileDialog.ShowDialog();
-
+            List<string> fileNames = new List<string>();
             try
             {
-                OriginalBitmap = new Bitmap(openFileDialog.FileName);
+                foreach (string filename in openFileDialog.FileNames)
+                {
+                    Bitmap b = new Bitmap(filename);
+                    OriginalBitmaps.Add(new Bitmap(filename));
+                }
             }
             catch (ArgumentException ae)
             {
                 MessageBox.Show(ae.Message);
             }
 
-            OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
+            // ImageSourceListe erstellen
+            foreach (var item in OriginalBitmaps)
+            {
+                OriginalImageSources.Add(BitmapConverter.ImageSourceForBitmap(item));
+            }
+            MessageBox.Show($"{OriginalImageSources.Count} Bilder wurden geladen. Filter auswählen, bestätigen und speichern.");
 
             // Bitmap ggf Zurücksetzen
             if(FilteredBitmap != null)
@@ -138,8 +161,33 @@ namespace MedianFilterProject
                 FilteredBitmap = null;
                 FilteredImageSource = null;
             }
-
         }
+
+        //private void DisplayNewBitmap(Object obj)
+        //{
+        //    OpenFileDialog openFileDialog = new OpenFileDialog();
+        //    openFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
+        //    openFileDialog.ShowDialog();
+        //    try
+        //    {
+        //        OriginalBitmap = new Bitmap(openFileDialog.FileName);
+        //    }
+        //    catch (ArgumentException ae)
+        //    {
+        //        MessageBox.Show(ae.Message);
+        //    }
+
+        //    OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
+
+        //    // Bitmap ggf Zurücksetzen
+        //    if (FilteredBitmap != null)
+        //    {
+        //        FilteredBitmap = null;
+        //        FilteredImageSource = null;
+        //    }
+
+        //}
+
 
         private void FilterBitmap(Object obj)
         {
@@ -150,13 +198,31 @@ namespace MedianFilterProject
             {
                 FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap, filterSelectedValue);
                 FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
-<<<<<<< HEAD
                 MessageBox.Show("Wert: " + filterSelectedValue);
-=======
                 MessageBox.Show("Dein Bild ist fertig!");
->>>>>>> b31e7c1cadf09d6940c64eae050a834a57799c3d
             }
         }
+
+        private void FilterBitmaps(Object obj)
+        {
+            FilteredBitmaps.Clear();
+            FilteredImageSources.Clear();
+            if (OriginalBitmaps == null)
+            {
+                MessageBox.Show("Keine Bilder geladen!");
+            }
+            else
+            {
+                foreach (var item in OriginalBitmaps)
+                    FilteredBitmaps.Add(MedianFilter.FilterBitmap(item, filterSelectedValue));
+                foreach (var item in FilteredBitmaps)
+                    FilteredImageSources.Add(BitmapConverter.ImageSourceForBitmap(item));
+                //MessageBox.Show("Wert: " + filterSelectedValue);
+                MessageBox.Show("Deine Bilder sind fertig! Bitte speichern oder neuen Wert wählen.");
+            }
+        }
+
+
 
         private void SaveBitmap(Object obj)
         {
@@ -174,6 +240,28 @@ namespace MedianFilterProject
                     MessageBox.Show(e.Message);
                 }
             }
+        }
+
+        private void SaveBitmaps(Object obj)
+        {
+            SaveFileDialog saveFileDialog;
+            foreach (var item in FilteredBitmaps)
+            {
+                saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    try
+                    {
+                        item.Save(saveFileDialog.FileName);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+                }
+            }
+            
         }
 
 
