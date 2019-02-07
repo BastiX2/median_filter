@@ -4,50 +4,104 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 
 namespace MedianFilterProject
 {
     class MedianFilter
     {
 
-
-        public static Bitmap FilterBitmap(Bitmap bitmap, int filterStrength)
+        public static Bitmap FilterBitmap(Bitmap sourceBitmap,
+                                            int matrixSize,
+                                              int bias = 0)
         {
-            Bitmap filteredBitmap = (Bitmap)bitmap.Clone();
-            var termsList = new List<Color>();
-            Color c;
+            BitmapData sourceData =
+                       sourceBitmap.LockBits(new Rectangle(0, 0,
+                       sourceBitmap.Width, sourceBitmap.Height),
+                       ImageLockMode.ReadOnly,
+                       PixelFormat.Format32bppArgb);
 
-            // Durchläuft alle Pixel in der Bitmap
-            for (int i = 0; i <= filteredBitmap.Width - filterStrength; i++)
+
+            byte[] pixelBuffer = new byte[sourceData.Stride *
+                                          sourceData.Height];
+
+            byte[] resultBuffer = new byte[sourceData.Stride *
+                                           sourceData.Height];
+
+
+            Marshal.Copy(sourceData.Scan0, pixelBuffer, 0,
+                                       pixelBuffer.Length);
+
+            sourceBitmap.UnlockBits(sourceData);
+
+            int filterOffset = matrixSize;
+            int calcOffset = 0;
+            int byteOffset = 0;
+
+            List<int> neighbourPixels = new List<int>();
+            byte[] middlePixel;
+
+
+            for (int offsetY = filterOffset; offsetY <
+                sourceBitmap.Height - filterOffset; offsetY++)
             {
-                for (int j = 0; j <= filteredBitmap.Height - filterStrength; j++)
+                for (int offsetX = filterOffset; offsetX <
+                    sourceBitmap.Width - filterOffset; offsetX++)
                 {
+                    byteOffset = offsetY *
+                                 sourceData.Stride +
+                                 offsetX * 4;
 
-                    // Durchläuft X pixel um Zielpixel
-                    for (int x = i; x < i + filterStrength; x++)
+                    neighbourPixels.Clear();
+
+                    for (int filterY = -filterOffset;
+                        filterY <= filterOffset; filterY++)
                     {
-                        for (int y = j; y < j + filterStrength; y++)
+                        for (int filterX = -filterOffset;
+                            filterX <= filterOffset; filterX++)
                         {
-                            // Fügt die Pixel der Liste hinzu
-                            c = filteredBitmap.GetPixel(x, y);
-                            termsList.Add(c);
+
+
+                            calcOffset = byteOffset +
+                                         (filterX * 4) +
+                                (filterY * sourceData.Stride);
+
+
+                            neighbourPixels.Add(BitConverter.ToInt32(
+                                             pixelBuffer, calcOffset));
                         }
                     }
-                    // Pixel werden in Array gespeichert
-                    var terms = new List<Color>(termsList);
-                    //Liste wird geleert
-                    termsList.Clear();
 
-                    terms.Sort((color1, color2) =>
-                    (color1.GetBrightness()).CompareTo(color2.GetBrightness()));
 
-                    c = terms[terms.Count/2];
+                    neighbourPixels.Sort();
 
-                    filteredBitmap.SetPixel(i + 1, j + 1, c);
+                    middlePixel = BitConverter.GetBytes(
+                                       neighbourPixels[filterOffset]);
+
+
+                    resultBuffer[byteOffset] = middlePixel[0];
+                    resultBuffer[byteOffset + 1] = middlePixel[1];
+                    resultBuffer[byteOffset + 2] = middlePixel[2];
+                    resultBuffer[byteOffset + 3] = middlePixel[3];
                 }
             }
 
-            return filteredBitmap;
+
+            Bitmap resultBitmap = new Bitmap(sourceBitmap.Width,
+                                             sourceBitmap.Height);
+
+            BitmapData resultData =
+                       resultBitmap.LockBits(new Rectangle(0, 0,
+                       resultBitmap.Width, resultBitmap.Height),
+                       ImageLockMode.WriteOnly,
+                       PixelFormat.Format32bppArgb);
+
+            Marshal.Copy(resultBuffer, 0, resultData.Scan0,
+                                       resultBuffer.Length);
+
+            resultBitmap.UnlockBits(resultData);
+
+            return resultBitmap;
         }
 
     }

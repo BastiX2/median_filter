@@ -125,7 +125,7 @@ namespace MedianFilterProject
             }
             catch (ArgumentException ae)
             {
-                MessageBox.Show(ae.Message);
+                return;
             }
 
             OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
@@ -146,12 +146,11 @@ namespace MedianFilterProject
                 MessageBox.Show("Bitte ein Bild öffnen!");
             } else
             {
-                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap, filterSelectedValue);
+                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap,filterSelectedValue);
                 FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
                 MessageBox.Show("Dein Bild ist fertig!");
             }
             
-         
         }
 
         private void SaveBitmap(Object obj)
@@ -165,9 +164,9 @@ namespace MedianFilterProject
                 {
                     FilteredBitmap.Save(saveFileDialog.FileName);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    MessageBox.Show(e.Message);
+                    return;
                 }
             }
         }
