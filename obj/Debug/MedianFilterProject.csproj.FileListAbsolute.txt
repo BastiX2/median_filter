@@ -26,3 +26,17 @@ H:\PMC\3.Sem\MedianFilter\median_filter\obj\Debug\MainWindow.baml
 H:\PMC\3.Sem\MedianFilter\median_filter\obj\Debug\MedianFilter.g.resources
 H:\PMC\3.Sem\MedianFilter\median_filter\obj\Debug\MedianFilter.Properties.Resources.resources
 H:\PMC\3.Sem\MedianFilter\median_filter\obj\Debug\MedianFilterProject.csproj.GenerateResource.Cache
+H:\PMC\3.Sem\median_filter\bin\Debug\MedianFilter.exe.config
+H:\PMC\3.Sem\median_filter\obj\Debug\MedianFilter.exe
+H:\PMC\3.Sem\median_filter\obj\Debug\MedianFilter.pdb
+H:\PMC\3.Sem\median_filter\bin\Debug\MedianFilter.exe
+H:\PMC\3.Sem\median_filter\bin\Debug\MedianFilter.pdb
+H:\PMC\3.Sem\median_filter\obj\Debug\MedianFilterProject.csprojResolveAssemblyReference.cache
+H:\PMC\3.Sem\median_filter\obj\Debug\MainWindow.g.cs
+H:\PMC\3.Sem\median_filter\obj\Debug\App.g.cs
+H:\PMC\3.Sem\median_filter\obj\Debug\MedianFilter_MarkupCompile.cache
+H:\PMC\3.Sem\median_filter\obj\Debug\MedianFilter_MarkupCompile.lref
+H:\PMC\3.Sem\median_filter\obj\Debug\MainWindow.baml
+H:\PMC\3.Sem\median_filter\obj\Debug\MedianFilter.g.resources
+H:\PMC\3.Sem\median_filter\obj\Debug\MedianFilter.Properties.Resources.resources
+H:\PMC\3.Sem\median_filter\obj\Debug\MedianFilterProject.csproj.GenerateResource.Cache

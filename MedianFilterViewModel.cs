@@ -58,8 +58,6 @@ namespace MedianFilterProject
 
         private Bitmap filteredBitmap;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public Bitmap FilteredBitmap
         {
             get { return filteredBitmap; }
@@ -68,6 +66,8 @@ namespace MedianFilterProject
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredBitmap"));
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private ICommand displayNewBitmap = null;
 
@@ -117,9 +117,16 @@ namespace MedianFilterProject
         private void DisplayNewBitmap(Object obj)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files(*.BMP; *.JPG; *.GIF; *.PNG)| *.BMP; *.JPG; *.GIF; *.PNG";
+            openFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
             openFileDialog.ShowDialog();
-            OriginalBitmap = new Bitmap(openFileDialog.FileName);
+            try
+            {
+                OriginalBitmap = new Bitmap(openFileDialog.FileName);
+            }
+            catch (ArgumentException ae)
+            {
+                MessageBox.Show(ae.Message);
+            }
             OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
 
             // Bitmap ggf Zurücksetzen
@@ -150,13 +157,13 @@ namespace MedianFilterProject
         private void SaveBitmap(Object obj)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Image Files(*.BMP; *.JPG; *.GIF; *.PNG)| *.BMP; *.JPG; *.GIF; *.PNG";
+            saveFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 try
                 {
-                    OriginalBitmap.Save(@"H:\Desktop\new.bmp");
+                    FilteredBitmap.Save(saveFileDialog.FileName);
                 }
                 catch (Exception e)
                 {
