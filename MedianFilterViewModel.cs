@@ -102,17 +102,17 @@ namespace MedianFilterProject
         /// <summary>
         /// Command beim Öffnen einer neuen Datei
         /// </summary>
-        private ICommand displayNewBitmap = null;
+        private ICommand openNewBitmapCommand = null;
 
-        public ICommand DisplayNewBitmapCommand
+        public ICommand OpenNewBitmapCommand
         {
             get
             {
-                if (displayNewBitmap == null)
+                if (openNewBitmapCommand == null)
                 {
-                    displayNewBitmap = new RelayCommand(DisplayNewBitmap, param => CanDisplayBitmap(param));
+                    openNewBitmapCommand = new RelayCommand(OpenNewBitmap, param => CanDisplayBitmap(param));
                 }
-                return displayNewBitmap;
+                return openNewBitmapCommand;
             }
 
         }
@@ -134,20 +134,35 @@ namespace MedianFilterProject
             }
         }
 
+       
+        private ICommand openNewFolderCommand = null;
+
+        public ICommand OpenNewFolderCommand
+        {
+            get
+            {
+                if (openNewFolderCommand == null)
+                {
+                    openNewFolderCommand = new RelayCommand(OpenNewFolder, param => CanSaveBitmap(param));
+                }
+                return openNewFolderCommand;
+            }
+
+        }
         /// <summary>
         /// Command beim Speichern der Datei
         /// </summary>
-        private ICommand saveNewBitmap = null;
+        private ICommand saveNewBitmapCommand = null;
 
         public ICommand SaveNewBitmapCommand
         {
             get
             {
-                if (saveNewBitmap == null)
+                if (saveNewBitmapCommand == null)
                 {
-                    saveNewBitmap = new RelayCommand(SaveBitmap, param => CanSaveBitmap(param));
+                    saveNewBitmapCommand = new RelayCommand(SaveBitmap, param => CanSaveBitmap(param));
                 }
-                return saveNewBitmap;
+                return saveNewBitmapCommand;
             }
 
         }
@@ -157,7 +172,7 @@ namespace MedianFilterProject
         /// erstellt eine ImageSource und zeigt sie an
         /// </summary>
         /// <param name="obj"></param>
-        private void DisplayNewBitmap(Object obj)
+        private void OpenNewBitmap(Object obj)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
@@ -180,7 +195,11 @@ namespace MedianFilterProject
                 FilteredBitmap = null;
                 FilteredImageSource = null;
             }
+        }
 
+        private void OpenNewFolder(Object obj)
+        {
+            MessageBox.Show("Neuer Ordner");
         }
 
         /// <summary>
