@@ -11,28 +11,22 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace MedianFilterProject
-{   
+{
     /// <summary>
     /// ViewModel 
     /// </summary>
     class MedianFilterViewModel : INotifyPropertyChanged
     {
         /// <summary>
-        /// Wert der Combobox
+        /// Property des Combobox Wertes, default 1
         /// </summary>
-        private int filterSelectedValue = 1;
+        public int FilterSelectedValue { get; set; } = 1;
 
         /// <summary>
-        /// Property des Combobox Wertes
+        /// bool um button zu aktivieren/deaktivieren
         /// </summary>
-        public int FilterSelectedValue
-        {
-            get { return filterSelectedValue; }
-            set { filterSelectedValue = value; }
-        }
-
-        private Boolean applyEnabled = false;
-        public Boolean ApplyEnabled
+        private bool applyEnabled = false;
+        public bool ApplyEnabled
         {
             get { return applyEnabled; }
             set
@@ -41,9 +35,11 @@ namespace MedianFilterProject
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("applyEnabled"));
             }
         }
-
-        private Boolean saveEnabled = false;
-        public Boolean SaveEnabled
+        /// <summary>
+        /// bool um button zu aktivieren/deaktivieren
+        /// </summary>
+        private bool saveEnabled = false;
+        public bool SaveEnabled
         {
             get { return saveEnabled; }
             set
@@ -53,8 +49,11 @@ namespace MedianFilterProject
             }
         }
 
-        private Boolean openFileEnabled = true;
-        public Boolean OpenFileEnabled
+        /// <summary>
+        /// bool um button zu aktivieren/deaktivieren
+        /// </summary>
+        private bool openFileEnabled = true;
+        public bool OpenFileEnabled
         {
             get { return openFileEnabled; }
             set
@@ -64,8 +63,11 @@ namespace MedianFilterProject
             }
         }
 
-        private Boolean openFolderEnabled = true;
-        public Boolean OpenFolderEnabled
+        /// <summary>
+        /// bool um button zu aktivieren/deaktivieren
+        /// </summary>
+        private bool openFolderEnabled = true;
+        public bool OpenFolderEnabled
         {
             get { return openFolderEnabled; }
             set
@@ -81,12 +83,13 @@ namespace MedianFilterProject
         private ImageSource originalImageSource;
 
         /// <summary>
-        /// OriginalImageSource Property
+        /// originalImageSource Feld
         /// </summary>
         public ImageSource OriginalImageSource
         {
             get { return originalImageSource; }
-            set {
+            set
+            {
                 originalImageSource = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalImageSource"));
             }
@@ -97,46 +100,49 @@ namespace MedianFilterProject
         private ImageSource filteredImageSource;
 
         /// <summary>
-        /// FilteredImageSource Property
+        /// filteredImageSource Feld
         /// </summary>
         public ImageSource FilteredImageSource
         {
             get { return filteredImageSource; }
-            set {
+            set
+            {
                 filteredImageSource = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredImageSource"));
             }
         }
 
         /// <summary>
-        /// originalBitmap Wert
+        /// originale Bitmap
         /// </summary>
         private Bitmap originalBitmap;
 
         /// <summary>
-        /// OriginalBitmap Property
+        /// originalBitmap Feld
         /// </summary>
         public Bitmap OriginalBitmap
         {
             get { return originalBitmap; }
-            set {
+            set
+            {
                 originalBitmap = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalBitmap"));              
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalBitmap"));
             }
         }
 
         /// <summary>
-        /// filteredBitmap Wert
+        /// gefilterte Bitmap
         /// </summary>
         private Bitmap filteredBitmap;
 
         /// <summary>
-        /// FilteredBitmap Property
+        /// filteredBitmap Feld
         /// </summary>
         public Bitmap FilteredBitmap
         {
             get { return filteredBitmap; }
-            set {   
+            set
+            {
                 filteredBitmap = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredBitmap"));
             }
@@ -145,25 +151,25 @@ namespace MedianFilterProject
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Command beim Öffnen einer neuen Datei
+        /// Command zum erstellen einer Bitmap
         /// </summary>
-        private ICommand openNewBitmapCommand = null;
+        private ICommand createBitmapCommand = null;
 
-        public ICommand OpenNewBitmapCommand
+        public ICommand CreateBitmapCommand
         {
             get
             {
-                if (openNewBitmapCommand == null)
+                if (createBitmapCommand == null)
                 {
-                    openNewBitmapCommand = new RelayCommand(OpenNewBitmap, param => CanDisplayBitmap(param));
+                    createBitmapCommand = new RelayCommand(CreateBitmap, param => CanDisplayBitmap(param));
                 }
-                return openNewBitmapCommand;
+                return createBitmapCommand;
             }
 
         }
 
         /// <summary>
-        /// Command beim Anwenden des Filters
+        /// Command zum Anwenden des Filters auf eine Bitmap
         /// </summary>
         private ICommand filterBitmapCommand;
 
@@ -179,7 +185,7 @@ namespace MedianFilterProject
             }
         }
 
-       
+
         private ICommand openNewFolderCommand = null;
 
         public ICommand OpenNewFolderCommand
@@ -211,38 +217,54 @@ namespace MedianFilterProject
             }
 
         }
-
-        private List<Bitmap> OriginalBitmaps = new List<Bitmap>();
-        private List<Bitmap> FilteredBitmaps = new List<Bitmap>();
+        /// <summary>
+        /// Liste aller Bitmaps im Ordner
+        /// </summary>
+        private List<Bitmap> OriginalBitmapList = new List<Bitmap>();
+        /// <summary>
+        /// Liste der Orginal Filenamen mit extenstion
+        /// </summary>
+        private List<string> OrignalFileNameList = new List<string>();
+        /// <summary>
+        /// Liste aller gefilterten Bitmaps
+        /// </summary>
+        private List<Bitmap> FilteredBitmapList = new List<Bitmap>();
 
         /// <summary>
-        /// Erstellt eine Bitmap basierend auf dem Pfad des OpenFileDialog und
-        /// erstellt eine ImageSource und zeigt sie an
+        /// Öffnet ein Datei
+        /// Wird beendet wenn keine Datei ausgewählt wurde, sonst
+        /// erstellt eine Bitmap basierend auf dem Pfad des OpenFileDialog und
+        /// erstellt eine ImageSource basierend auf der Bitmap
         /// </summary>
         /// <param name="obj"></param>
-        private void OpenNewBitmap(Object obj)
+        private void CreateBitmap(object obj)
         {
+            // Speichern button deaktivieren
             SaveEnabled = false;
+            ApplyEnabled = false;
 
+            // Filedialog öffnen
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            // Filter damit nur Bilddateien ausgewählt werden können
             openFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
             openFileDialog.ShowDialog();
+            // Versuche eine Bitmap basierend auf dem Pfad zu erstellen
             try
             {
-                OriginalBitmap = new Bitmap(openFileDialog.FileName);     
+                OriginalBitmap = new Bitmap(openFileDialog.FileName);
             }
             catch (ArgumentException)
             {
                 // Beende die Methode, das Programm läuft weiter
                 return;
             }
-
+            // ImageSource basierend auf Bitmap erstellen
             OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
 
             // Button Aktivieren
             ApplyEnabled = true;
 
-            // Bitmap ggf Zurücksetzen
+            // gefiltertebitmap zurücksetzen wenn eine alte vorhanden ist
             if (FilteredBitmap != null)
             {
                 FilteredBitmap = null;
@@ -250,9 +272,17 @@ namespace MedianFilterProject
             }
         }
 
-        private void OpenNewFolder(Object obj)
+        /// <summary>
+        /// Öffnen eines Ordners
+        /// wird beendet wenn kein Ordner ausgewählt wurde
+        /// Fügt alle Bilddatei im ausgewählten Ordner der liste
+        /// OriginalBitmapList hinzu
+        /// </summary>
+        /// <param name="obj"></param>
+        private void OpenNewFolder(object obj)
         {
             SaveEnabled = false;
+            ApplyEnabled = false;
 
             // Bild zurücksetzen wenn vorhanden
             if (OriginalBitmap != null)
@@ -267,32 +297,41 @@ namespace MedianFilterProject
                 FilteredImageSource = null;
             }
 
-          
-            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-         
-            
-            dialog.ShowDialog();
+            // Ordner dialog
+            System.Windows.Forms.FolderBrowserDialog openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            openFolderDialog.ShowDialog();
 
-            if (String.IsNullOrEmpty(dialog.SelectedPath))
+            // Kein Ornder ausgewählt
+            if (string.IsNullOrEmpty(openFolderDialog.SelectedPath))
             {
+                // Beende die Methode, das Programm läuft weiter
                 return;
             }
 
-            string[] files = Directory.GetFiles(dialog.SelectedPath);
-            string all = "";
-
-         
-            var ext = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
-            var myFiles = Directory.GetFiles(dialog.SelectedPath, "*.*", SearchOption.AllDirectories)
-                 .Where(s => ext.Contains(Path.GetExtension(s)));
-
-            foreach (var item in myFiles)
+            var allowedExtensionList = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
+            var imageList = Directory.GetFiles(openFolderDialog.SelectedPath, "*.*")
+                 .Where(s => allowedExtensionList.Contains(Path.GetExtension(s)));
+            
+            // Ordner enthählt keine Bilder
+            if (imageList.Count() == 0)
             {
-                OriginalBitmaps.Add(new Bitmap(item));
-                all += item;
+                MessageBox.Show("Der Ordner enthält keine Bilder");
+                return;
             }
 
-            MessageBox.Show(all);
+            // Liste leeren
+            OriginalBitmapList.Clear();
+
+            // Bitmaps erstellen und hinzufügen
+            foreach (var image in imageList)
+            {
+                OriginalBitmapList.Add(new Bitmap(image));
+                OrignalFileNameList.Add(Path.GetFileName(image));
+            }
+
+            MessageBox.Show(String.Format("Es wurden {0} Bilder hinzugefügt", OriginalBitmapList.Count()));     
+
+            ApplyEnabled = true;
 
         }
 
@@ -301,59 +340,70 @@ namespace MedianFilterProject
         /// Erstellt eine ImageSource der gefilterten Bitmap und stellt sie dar
         /// </summary>
         /// <param name="obj"></param>
-        private void FilterBitmap(Object obj)
+        private void FilterBitmap(object obj)
         {
             // Check ob eine Datei vorhanden ist
-            if(originalBitmap != null)
+            if (originalBitmap != null)
             {
-                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap, filterSelectedValue);
+                FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap, FilterSelectedValue);
                 FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
                 MessageBox.Show("Dein Bild ist fertig!");
-                SaveEnabled = true;
-            } else
-            {
-                // Sonst check ob Bilder im Ordner vorhanden sind
-                if (OriginalBitmaps.Count == 0)
-                {
-                    MessageBox.Show("Keine Bilder im Ordner gefunden!");
-                }
-                else
-                {
-                    MessageBox.Show("Deine Bilder werden jetzt bearbeitet");
-                    // Alle Bilder durchlaufen und Filtern
-                    foreach (var item in OriginalBitmaps)
-                    {
-                        FilteredBitmaps.Add(MedianFilter.FilterBitmap(item, filterSelectedValue));
-                    }
-                       
-                    //MessageBox.Show("Wert: " + filterSelectedValue);
-                    MessageBox.Show("Deine Bilder sind fertig! Bitte speichern oder neuen Wert wählen.");
-                }
+                
             }
-               
+            else
+            {
+                MessageBox.Show("Deine Bilder werden jetzt bearbeitet");
+                // Alle Bilder durchlaufen und Filtern
+                foreach (var bitmap in OriginalBitmapList)
+                {
+                    FilteredBitmapList.Add(MedianFilter.FilterBitmap(bitmap, FilterSelectedValue));
+                }
 
+                MessageBox.Show("Deine Bilder sind fertig! Bitte speichern oder neuen Wert wählen.");
+
+            }
+
+            SaveEnabled = true;
+            applyEnabled = true;
         }
 
         /// <summary>
         /// Speichert die gefilterte Bitmap in dem Pfad des SaveDialog 
         /// </summary>
         /// <param name="obj"></param>
-        private void SaveBitmap(Object obj)
+        private void SaveBitmap(object obj)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
-
-            if (saveFileDialog.ShowDialog() == true)
+            if(FilteredBitmap != null)
             {
-                try
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
+
+                if (saveFileDialog.ShowDialog() == true)
                 {
-                    FilteredBitmap.Save(saveFileDialog.FileName);
+                    try
+                    {
+                        FilteredBitmap.Save(saveFileDialog.FileName);
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
                 }
-                catch (Exception)
+            } else
+            {
+                System.Windows.Forms.FolderBrowserDialog openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
+                openFolderDialog.ShowDialog();
+
+                // Kein Ornder ausgewählt
+                if (string.IsNullOrEmpty(openFolderDialog.SelectedPath))
                 {
+                    // Beende die Methode, das Programm läuft weiter
                     return;
                 }
+
+                
             }
+            
         }
 
         private bool CanDisplayBitmap(object param)
