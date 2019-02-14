@@ -10,21 +10,34 @@ using System.Windows.Input;
 using MedianFilter;
 
 namespace MedianFilterProject
-{
+{   
+    /// <summary>
+    /// ViewModel 
+    /// </summary>
     class MedianFilterViewModel : INotifyPropertyChanged
     {
-
+        /// <summary>
+        /// Wert der Combobox
+        /// </summary>
         private int filterSelectedValue = 1;
 
+        /// <summary>
+        /// Property des Combobox Wertes
+        /// </summary>
         public int FilterSelectedValue
         {
             get { return filterSelectedValue; }
             set { filterSelectedValue = value; }
         }
 
-
+        /// <summary>
+        /// ImageSource der Orginalen Datei
+        /// </summary>
         private ImageSource originalImageSource;
 
+        /// <summary>
+        /// OriginalImageSource Property
+        /// </summary>
         public ImageSource OriginalImageSource
         {
             get { return originalImageSource; }
@@ -33,9 +46,14 @@ namespace MedianFilterProject
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalImageSource"));
             }
         }
-
+        /// <summary>
+        /// ImageSource der gefilterten Bitmap
+        /// </summary>
         private ImageSource filteredImageSource;
 
+        /// <summary>
+        /// FilteredImageSource Property
+        /// </summary>
         public ImageSource FilteredImageSource
         {
             get { return filteredImageSource; }
@@ -45,8 +63,14 @@ namespace MedianFilterProject
             }
         }
 
+        /// <summary>
+        /// originalBitmap Wert
+        /// </summary>
         private Bitmap originalBitmap;
 
+        /// <summary>
+        /// OriginalBitmap Property
+        /// </summary>
         public Bitmap OriginalBitmap
         {
             get { return originalBitmap; }
@@ -56,8 +80,14 @@ namespace MedianFilterProject
             }
         }
 
+        /// <summary>
+        /// filteredBitmap Wert
+        /// </summary>
         private Bitmap filteredBitmap;
 
+        /// <summary>
+        /// FilteredBitmap Property
+        /// </summary>
         public Bitmap FilteredBitmap
         {
             get { return filteredBitmap; }
@@ -69,6 +99,9 @@ namespace MedianFilterProject
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Command beim Öffnen einer neuen Datei
+        /// </summary>
         private ICommand displayNewBitmap = null;
 
         public ICommand DisplayNewBitmapCommand
@@ -84,6 +117,9 @@ namespace MedianFilterProject
 
         }
 
+        /// <summary>
+        /// Command beim Anwenden des Filters
+        /// </summary>
         private ICommand filterBitmapCommand;
 
         public ICommand FilterBitmapCommand
@@ -98,6 +134,9 @@ namespace MedianFilterProject
             }
         }
 
+        /// <summary>
+        /// Command beim Speichern der Datei
+        /// </summary>
         private ICommand saveNewBitmap = null;
 
         public ICommand SaveNewBitmapCommand
@@ -113,7 +152,11 @@ namespace MedianFilterProject
 
         }
 
-
+        /// <summary>
+        /// Erstellt eine Bitmap basierend auf dem Pfad des OpenFileDialog und
+        /// erstellt eine ImageSource und zeigt sie an
+        /// </summary>
+        /// <param name="obj"></param>
         private void DisplayNewBitmap(Object obj)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -123,8 +166,9 @@ namespace MedianFilterProject
             {
                 OriginalBitmap = new Bitmap(openFileDialog.FileName);
             }
-            catch (ArgumentException ae)
+            catch (ArgumentException)
             {
+                // Beende die Methode, das Programm läuft weiter
                 return;
             }
 
@@ -139,6 +183,11 @@ namespace MedianFilterProject
 
         }
 
+        /// <summary>
+        /// Wenden den Filter auf die OrginalBitmap an und speichert die neue Bitmap als FilteredBitmap
+        /// Erstellt eine ImageSource der gefilterten Bitmap und stellt sie dar
+        /// </summary>
+        /// <param name="obj"></param>
         private void FilterBitmap(Object obj)
         {
             if (OriginalBitmap == null)
@@ -153,6 +202,10 @@ namespace MedianFilterProject
             
         }
 
+        /// <summary>
+        /// Speichert die gefilterte Bitmap in dem Pfad des SaveDialog 
+        /// </summary>
+        /// <param name="obj"></param>
         private void SaveBitmap(Object obj)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -170,7 +223,6 @@ namespace MedianFilterProject
                 }
             }
         }
-
 
         private bool CanDisplayBitmap(object param)
         {
