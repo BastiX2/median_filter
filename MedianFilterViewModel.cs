@@ -222,14 +222,14 @@ namespace MedianFilterProject
         /// <param name="obj"></param>
         private void OpenNewBitmap(Object obj)
         {
+            SaveEnabled = false;
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image Files(*.jpg; *.bmp; *.gif; *.png)| *.jpg; *.bmp; *.gif; *.png";
             openFileDialog.ShowDialog();
             try
             {
-                OriginalBitmap = new Bitmap(openFileDialog.FileName);
-                
-                
+                OriginalBitmap = new Bitmap(openFileDialog.FileName);     
             }
             catch (ArgumentException)
             {
@@ -238,9 +238,9 @@ namespace MedianFilterProject
             }
 
             OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
+
             // Button Aktivieren
             ApplyEnabled = true;
-            SaveEnabled = true;
 
             // Bitmap ggf Zurücksetzen
             if (FilteredBitmap != null)
@@ -251,9 +251,11 @@ namespace MedianFilterProject
         }
 
         private void OpenNewFolder(Object obj)
-        {   
+        {
+            SaveEnabled = false;
+
             // Bild zurücksetzen wenn vorhanden
-            if(OriginalBitmap != null)
+            if (OriginalBitmap != null)
             {
                 OriginalBitmap = null;
                 OriginalImageSource = null;
@@ -264,9 +266,17 @@ namespace MedianFilterProject
                 FilteredBitmap = null;
                 FilteredImageSource = null;
             }
-           
+
+          
             System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+         
+            
             dialog.ShowDialog();
+
+            if (String.IsNullOrEmpty(dialog.SelectedPath))
+            {
+                return;
+            }
 
             string[] files = Directory.GetFiles(dialog.SelectedPath);
             string all = "";
@@ -299,6 +309,7 @@ namespace MedianFilterProject
                 FilteredBitmap = MedianFilter.FilterBitmap(OriginalBitmap, filterSelectedValue);
                 FilteredImageSource = BitmapConverter.ImageSourceForBitmap(FilteredBitmap);
                 MessageBox.Show("Dein Bild ist fertig!");
+                SaveEnabled = true;
             } else
             {
                 // Sonst check ob Bilder im Ordner vorhanden sind
