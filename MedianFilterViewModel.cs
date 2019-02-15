@@ -9,6 +9,7 @@ using MedianFilter;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace MedianFilterProject
 {
@@ -219,13 +220,34 @@ namespace MedianFilterProject
         }
 
         /// <summary>
+        /// Liste aller eingelesenen Dateinamen
+        /// </summary>
+        private List<string> fileNames;
+
+        public List<string> FileNames
+        {
+            get { return fileNames; }
+            set
+            {
+                fileNames = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FileNames"));
+            }
+        }
+        
+
+        /// <summary>
         /// Liste aller Bitmaps im Ordner
         /// </summary>
         private List<Bitmap> OriginalBitmapList = new List<Bitmap>();
         /// <summary>
-        /// Liste der Orginal Filenamen mit extenstion
+        /// Liste der Orginal Filenamen mit extension
         /// </summary>
-        private List<string> OriginalFileNameList = new List<string>();
+        private ObservableCollection<string> originalFileNameList;
+        public ObservableCollection<string> OriginalFileNameList
+        {
+            get { return originalFileNameList; }
+        }
+
         /// <summary>
         /// Liste aller gefilterten Bitmaps
         /// </summary>
@@ -325,13 +347,16 @@ namespace MedianFilterProject
 
             // Liste leeren
             OriginalBitmapList.Clear();
+            originalFileNameList = new ObservableCollection<string>();
 
             // Bitmaps erstellen und hinzufügen
             foreach (var image in imageList)
             {
                 OriginalBitmapList.Add(new Bitmap(image));
-                OriginalFileNameList.Add(Path.GetFileName(image));
+                originalFileNameList.Add(Path.GetFileName(image));
             }
+            MessageBox.Show(originalFileNameList[0]);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("originalFileNameList"));
 
             MessageBox.Show(String.Format("Es wurden {0} Bilder hinzugefügt", OriginalBitmapList.Count()));
 
