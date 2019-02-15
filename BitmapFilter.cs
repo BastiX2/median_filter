@@ -8,10 +8,19 @@ using System.Drawing.Imaging;
 
 namespace MedianFilterProject
 {
-    class MedianFilter
+    /// <summary>
+    /// BitmapFilter
+    /// </summary>
+    class BitmapFilter
     {
-
-        public static Bitmap FilterBitmap(Bitmap sourceBitmap,
+        /// <summary>
+        /// Wenden den MedianFilter auf eine Bitmap an
+        /// </summary>
+        /// <param name="sourceBitmap">bitmap</param>
+        /// <param name="matrixSize"></param>
+        /// <param name="bias"></param>
+        /// <returns></returns>
+        public static Bitmap MedianFilterBitmap(Bitmap sourceBitmap,
                                             int matrixSize,
                                               int bias = 0)
         {
@@ -108,4 +117,4 @@ namespace MedianFilterProject
 
 }
 
-    
+
