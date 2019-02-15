@@ -20,7 +20,7 @@ namespace MedianFilterProject
         {   
             InitializeComponent();
             DataContext = new MedianFilterViewModel();
-        } 
+        }
 
     }
 }
