@@ -23,6 +23,17 @@ namespace MedianFilterProject
         /// </summary>
         public int FilterSelectedValue { get; set; } = 1;
 
+        private string saveContent = "Save File";
+        public string SaveContent
+        {
+            get { return saveContent; }
+            set
+            {
+                saveContent = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("saveContent"));
+            }
+        }
+
         /// <summary>
         /// bool um button zu aktivieren/deaktivieren
         /// </summary>
@@ -92,7 +103,7 @@ namespace MedianFilterProject
             set
             {
                 originalImageSource = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalImageSource"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("originalImageSource"));
             }
         }
         /// <summary>
@@ -109,7 +120,7 @@ namespace MedianFilterProject
             set
             {
                 filteredImageSource = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredImageSource"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("filteredImageSource"));
             }
         }
 
@@ -127,7 +138,7 @@ namespace MedianFilterProject
             set
             {
                 originalBitmap = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalBitmap"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("originalBitmap"));
             }
         }
 
@@ -145,7 +156,7 @@ namespace MedianFilterProject
             set
             {
                 filteredBitmap = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FilteredBitmap"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("filteredBitmap"));
             }
         }
 
@@ -239,6 +250,7 @@ namespace MedianFilterProject
         /// Liste aller Bitmaps im Ordner
         /// </summary>
         private List<Bitmap> OriginalBitmapList = new List<Bitmap>();
+
         /// <summary>
         /// Liste der Orginal Filenamen mit extension
         /// </summary>
@@ -247,6 +259,7 @@ namespace MedianFilterProject
         {
             get { return originalFileNameList; }
         }
+
 
         /// <summary>
         /// Liste aller gefilterten Bitmaps
@@ -262,7 +275,7 @@ namespace MedianFilterProject
         /// <param name="obj"></param>
         private void CreateBitmap(object obj)
         {
-
+            
             // gefiltertebitmap zurücksetzen wenn eine alte vorhanden ist
             if (FilteredBitmap != null)
             {
@@ -292,10 +305,10 @@ namespace MedianFilterProject
             // ImageSource basierend auf Bitmap erstellen
             OriginalImageSource = BitmapConverter.ImageSourceForBitmap(OriginalBitmap);
 
-            // Button Aktivieren
+            // Button Aktivieren und benennen
             ApplyEnabled = true;
+            SaveContent = "Save File";
 
-           
         }
 
         /// <summary>
@@ -309,6 +322,7 @@ namespace MedianFilterProject
         {
             SaveEnabled = false;
             ApplyEnabled = false;
+           
 
             // Bild zurücksetzen wenn vorhanden
             if (OriginalBitmap != null)
@@ -358,8 +372,9 @@ namespace MedianFilterProject
             MessageBox.Show(originalFileNameList[0]);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("originalFileNameList"));
 
-            MessageBox.Show(String.Format("Es wurden {0} Bilder hinzugefügt", OriginalBitmapList.Count()));
-
+            // MessageBox.Show(String.Format("Es wurden {0} Bilder hinzugefügt", OriginalBitmapList.Count()));
+            // Button aktivieren und umbenennen
+            SaveContent = "Save Files";
             ApplyEnabled = true;
 
         }
@@ -432,12 +447,16 @@ namespace MedianFilterProject
                 }
 
                 string folder = openFolderDialog.SelectedPath;
-
+                string suffix = "_filtered_";
                 for (int i = 0; i < FilteredBitmapList.Count(); i++)
-                {
-                    FilteredBitmapList[i].Save(folder+"\\"+OriginalFileNameList[i]);
-                }
+                {   
+                    // Aufteiles des Dateinames in Name und Extension
+                    var fileNameFull = OriginalFileNameList[i].Split('.');
+                    var fileName = fileNameFull[0];
+                    var fileExtension = fileNameFull[1];
 
+                    FilteredBitmapList[i].Save(folder + "\\" + fileName + suffix + FilterSelectedValue + "." + fileExtension);
+                }
 
             }
 
