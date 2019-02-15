@@ -21,7 +21,7 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <Button Grid.Row="0" Grid.Column="0" IsEnabled="{Binding OpenFileEnabled}" x:Name="open_file" Content="Open File" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Command="{Binding OpenNewBitmapCommand}"/>
+        <Button Grid.Row="0" Grid.Column="0" IsEnabled="{Binding OpenFileEnabled}" x:Name="open_file" Content="Open File" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Command="{Binding CreateBitmapCommand}"/>
         <Button Grid.Row="0" Grid.Column="0" IsEnabled="{Binding OpenFolderEnabled}" x:Name="open_folder" Content="Open Folder" HorizontalAlignment="Left" Margin="100,10,10,10" VerticalAlignment="Top" Width="75" Command="{Binding OpenNewFolderCommand}"/>
         <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding ApplyEnabled}" x:Name="apply" Content="Apply" Command="{Binding FilterBitmapCommand}" HorizontalAlignment="Right" Margin="10,10,10,10" Width="100"/>
         <Button Grid.Row="0" Grid.Column="1" IsEnabled="{Binding SaveEnabled}" x:Name="save" Content="Save File" HorizontalAlignment="Right" Margin="10,10,10,10" VerticalAlignment="Top" Width="75" Command="{Binding SaveNewBitmapCommand}"/>
