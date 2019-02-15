@@ -280,13 +280,8 @@ namespace MedianFilterProject
         /// <summary>
         /// Liste der Orginal Filenamen mit extension
         /// </summary>
-        private ObservableCollection<string> originalFileNameList;
-        public ObservableCollection<string> OriginalFileNameList
-        {
-            get { return originalFileNameList; }
-        }
-
-
+        private List<string> OriginalFileNameList = new List<string>();
+      
         /// <summary>
         /// Liste aller gefilterten Bitmaps
         /// </summary>
@@ -385,19 +380,18 @@ namespace MedianFilterProject
                 return;
             }
 
-            // Liste leeren
+            // Listen leeren
             OriginalBitmapList.Clear();
-            originalFileNameList = new ObservableCollection<string>();
+            FilteredBitmapList.Clear();
+            OriginalFileNameList.Clear();
 
             // Bitmaps erstellen und hinzufügen
             foreach (var image in imageList)
             {
                 OriginalBitmapList.Add(new Bitmap(image));
-                originalFileNameList.Add(Path.GetFileName(image));
+                OriginalFileNameList.Add(Path.GetFileName(image).ToString());
             }
-            MessageBox.Show(originalFileNameList[0]);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("originalFileNameList"));
-
+            
             // MessageBox.Show(String.Format("Es wurden {0} Bilder hinzugefügt", OriginalBitmapList.Count()));
             // Button aktivieren und umbenennen
             SaveContent = "Save Files";

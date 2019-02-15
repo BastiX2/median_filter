@@ -39,10 +39,6 @@
 
         <Image Grid.Row="1" Grid.Column="0" x:Name="image_original" Source="{Binding OriginalImageSource}" HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto"/>
         <Image Grid.Row="1" Grid.Column="1" x:Name="image_filter" Source="{Binding FilteredImageSource}" HorizontalAlignment="Left" Height="Auto" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto"/>
-        <ListView x:Name="lvFileNames" Height="Auto" Grid.Row="1" Width="Auto" Margin="0,0,0,0">
-            <TextBlock x:Name="tbHeader" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="Read Files" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
-            <DataGrid x:Name="dataGrid" ItemsSource="{Binding OriginalFileNameList}"/>
-        </ListView>
 
     </Grid>
 </Window>
