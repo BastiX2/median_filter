@@ -13,6 +13,14 @@ namespace MedianFilterProject
     /// </summary>
     class BitmapFilter
     {
+        internal MedianFilterViewModel MedianFilterViewModel
+        {
+            get => default(MedianFilterViewModel);
+            set
+            {
+            }
+        }
+
         /// <summary>
         /// Wenden den MedianFilter auf eine Bitmap an
         /// </summary>

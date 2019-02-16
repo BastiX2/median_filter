@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MedianFilterProject.RelayCommand">
+    <Position X="5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAACAAQAAFAAAAAAAAAAAAAAAAAAgAAABAA=</HashCode>
+      <FileName>RelayCommand.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MedianFilterViewModel" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MedianFilterProject.MedianFilterViewModel">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gEQsAABEBDAAAAAYQAAEIEwIgMAAAAAAAUgEAMBADAg=</HashCode>
+      <FileName>MedianFilterViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MainWindow" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MedianFilterProject.BitmapFilter">
+    <Position X="5" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>BitmapFilter.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MedianFilterViewModel" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MedianFilter.BitmapConverter">
+    <Position X="5" Y="3.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAEAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>BitmapConverter.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MedianFilterViewModel" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MedianFilterProject.MainWindow">
+    <Position X="5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="8.77" />
+</ClassDiagram>

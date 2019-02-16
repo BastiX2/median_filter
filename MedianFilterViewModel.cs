@@ -204,11 +204,6 @@ namespace MedianFilterProject
 
         }
 
-        /// <summary>
-        /// Command zum Anwenden des Filters auf eine Bitmap
-        /// </summary>
-        private ICommand filterBitmapCommand;
-
         public ICommand FilterBitmapCommand
         {
             get
@@ -275,7 +270,7 @@ namespace MedianFilterProject
         /// <summary>
         /// Liste aller Bitmaps im Ordner
         /// </summary>
-        private List<Bitmap> OriginalBitmapList = new List<Bitmap>();
+        private List<Bitmap> originalBitmapList = new List<Bitmap>();
 
         /// <summary>
         /// Liste der Orginal Filenamen mit extension
@@ -287,7 +282,7 @@ namespace MedianFilterProject
         /// <summary>
         /// Liste aller gefilterten Bitmaps
         /// </summary>
-        private List<Bitmap> FilteredBitmapList = new List<Bitmap>();
+        private List<Bitmap> filteredBitmapList = new List<Bitmap>();
 
         /// <summary>
         /// Öffnet ein Datei
@@ -299,8 +294,8 @@ namespace MedianFilterProject
         private void CreateBitmap(object obj)
         {
             // Listen leeren
-            OriginalBitmapList.Clear();
-            FilteredBitmapList.Clear();
+            originalBitmapList.Clear();
+            filteredBitmapList.Clear();
             OriginalFileNameList = new ObservableCollection<string>();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalFileNameList"));
 
@@ -343,7 +338,7 @@ namespace MedianFilterProject
         /// Öffnen eines Ordners
         /// wird beendet wenn kein Ordner ausgewählt wurde
         /// Fügt alle Bilddatei im ausgewählten Ordner der liste
-        /// OriginalBitmapList hinzu
+        /// originalBitmapList hinzu
         /// </summary>
         /// <param name="obj"></param>
         private void OpenNewFolder(object obj)
@@ -353,8 +348,8 @@ namespace MedianFilterProject
             ApplyEnabled = false;
 
             // Listen leeren
-            OriginalBitmapList.Clear();
-            FilteredBitmapList.Clear();
+            originalBitmapList.Clear();
+            filteredBitmapList.Clear();
             OriginalFileNameList = new ObservableCollection<string>();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalFileNameList"));
 
@@ -396,12 +391,12 @@ namespace MedianFilterProject
             // Bitmaps erstellen und hinzufügen
             foreach (var image in imageList)
             {
-                OriginalBitmapList.Add(new Bitmap(image));
+                originalBitmapList.Add(new Bitmap(image));
                 OriginalFileNameList.Add(Path.GetFileName(image).ToString());
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalFileNameList"));
-            // MessageBox.Show(String.Format("Es wurden {0} Bilder hinzugefügt", OriginalBitmapList.Count()));
+            // MessageBox.Show(String.Format("Es wurden {0} Bilder hinzugefügt", originalBitmapList.Count()));
             // Button aktivieren und umbenennen
             SaveContent = "Save Files";
             ApplyEnabled = true;
@@ -426,9 +421,9 @@ namespace MedianFilterProject
             {
                 MessageBox.Show("Deine Bilder werden jetzt bearbeitet");
                 // Alle Bilder durchlaufen und Filtern
-                foreach (var bitmap in OriginalBitmapList)
+                foreach (var bitmap in originalBitmapList)
                 {
-                    FilteredBitmapList.Add(BitmapFilter.MedianFilterBitmap(bitmap, FilterSelectedValue));
+                    filteredBitmapList.Add(BitmapFilter.MedianFilterBitmap(bitmap, FilterSelectedValue));
                 }
 
                 MessageBox.Show("Deine Bilder sind fertig! Bitte speichern oder neuen Wert wählen.");
@@ -474,20 +469,27 @@ namespace MedianFilterProject
 
                 string folder = openFolderDialog.SelectedPath;
                 string suffix = "_filtered_";
-                for (int i = 0; i < FilteredBitmapList.Count(); i++)
+                for (int i = 0; i < filteredBitmapList.Count(); i++)
                 {
                     // Aufteiles des Dateinames in Name und Extension
                     var fileNameFull = OriginalFileNameList[i].Split('.');
                     var fileName = fileNameFull[0];
                     var fileExtension = fileNameFull[1];
                     // Dateiname setzt sich aus Orginalname + Suffix + Filterstärke + Orginalextension zusammen
-                    FilteredBitmapList[i].Save(folder + "\\" + fileName + suffix + FilterSelectedValue + "." + fileExtension);
+                    filteredBitmapList[i].Save(folder + "\\" + fileName + suffix + FilterSelectedValue + "." + fileExtension);
                 }
 
             }
 
         }
 
+        public MainWindow MainWindow
+        {
+            get => default(MainWindow);
+            set
+            {
+            }
+        }
     }
 
 }
