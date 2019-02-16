@@ -280,8 +280,10 @@ namespace MedianFilterProject
         /// <summary>
         /// Liste der Orginal Filenamen mit extension
         /// </summary>
-        private List<string> OriginalFileNameList = new List<string>();
-      
+        //private ObservableCollection<string> originalFileNameList = new ObservableCollection<string>();
+
+        public ObservableCollection<string> OriginalFileNameList { get; set; }
+
         /// <summary>
         /// Liste aller gefilterten Bitmaps
         /// </summary>
@@ -296,6 +298,11 @@ namespace MedianFilterProject
         /// <param name="obj"></param>
         private void CreateBitmap(object obj)
         {
+            // Listen leeren
+            OriginalBitmapList.Clear();
+            FilteredBitmapList.Clear();
+            OriginalFileNameList = new ObservableCollection<string>();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalFileNameList"));
 
             // gefiltertebitmap zurücksetzen wenn eine alte vorhanden ist
             if (FilteredBitmap != null)
@@ -345,6 +352,12 @@ namespace MedianFilterProject
             SaveEnabled = false;
             ApplyEnabled = false;
 
+            // Listen leeren
+            OriginalBitmapList.Clear();
+            FilteredBitmapList.Clear();
+            OriginalFileNameList = new ObservableCollection<string>();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalFileNameList"));
+
             // Bild zurücksetzen wenn vorhanden
             if (OriginalBitmap != null)
             {
@@ -380,18 +393,14 @@ namespace MedianFilterProject
                 return;
             }
 
-            // Listen leeren
-            OriginalBitmapList.Clear();
-            FilteredBitmapList.Clear();
-            OriginalFileNameList.Clear();
-
             // Bitmaps erstellen und hinzufügen
             foreach (var image in imageList)
             {
                 OriginalBitmapList.Add(new Bitmap(image));
                 OriginalFileNameList.Add(Path.GetFileName(image).ToString());
             }
-            
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OriginalFileNameList"));
             // MessageBox.Show(String.Format("Es wurden {0} Bilder hinzugefügt", OriginalBitmapList.Count()));
             // Button aktivieren und umbenennen
             SaveContent = "Save Files";
