@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
+using System.Threading;
 
 namespace MedianFilterProject
 {
@@ -13,14 +14,16 @@ namespace MedianFilterProject
     /// </summary>
     class BitmapFilter
     {
-        internal MedianFilterViewModel MedianFilterViewModel
-        {
-            get => default(MedianFilterViewModel);
-            set
-            {
-            }
-        }
+        private Bitmap SourceBitmap { get; set; }
 
+        private int MatrixSize { get; set; }
+
+        private int Bias { get; set; } = 0;
+
+        private static void Test()
+        {
+            MessageBox.Show("ThreadTest!");
+        }
         /// <summary>
         /// Wenden den MedianFilter auf eine Bitmap an
         /// </summary>
@@ -29,9 +32,12 @@ namespace MedianFilterProject
         /// <param name="bias"></param>
         /// <returns></returns>
         public static Bitmap MedianFilterBitmap(Bitmap sourceBitmap,
-                                            int matrixSize,
-                                              int bias = 0)
+                                            int matrixSize)
         {
+            var thread = new Thread(Test);
+            thread.Start();
+
+
             BitmapData sourceData =
                        sourceBitmap.LockBits(new Rectangle(0, 0,
                        sourceBitmap.Width, sourceBitmap.Height),

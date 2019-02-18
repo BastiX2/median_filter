@@ -203,6 +203,10 @@ namespace MedianFilterProject
             }
 
         }
+        /// <summary>
+        /// Command zum Anwenden des Filters auf eine Bitmap
+        /// </summary>
+        private ICommand filterBitmapCommand;
 
         public ICommand FilterBitmapCommand
         {
@@ -482,14 +486,7 @@ namespace MedianFilterProject
             }
 
         }
-
-        public MainWindow MainWindow
-        {
-            get => default(MainWindow);
-            set
-            {
-            }
-        }
+      
     }
 
 }

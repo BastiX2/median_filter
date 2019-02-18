@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace MedianFilterProject
 {
-    public class RelayCommand
+    public class RelayCommand : ICommand
     {
         private Action<object> _action;
         private Func<object, bool> _func;
@@ -42,12 +42,5 @@ namespace MedianFilterProject
 
         #endregion
 
-        internal MedianFilterViewModel MedianFilterViewModel
-        {
-            get => default(MedianFilterViewModel);
-            set
-            {
-            }
-        }
     }
 }

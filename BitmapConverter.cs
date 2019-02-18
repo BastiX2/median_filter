@@ -13,13 +13,6 @@ namespace MedianFilter
     /// </summary>
     class BitmapConverter
     {
-        internal MedianFilterProject.MedianFilterViewModel MedianFilterViewModel
-        {
-            get => default(MedianFilterProject.MedianFilterViewModel);
-            set
-            {
-            }
-        }
 
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
