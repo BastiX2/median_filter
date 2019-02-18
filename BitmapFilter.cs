@@ -14,16 +14,6 @@ namespace MedianFilterProject
     /// </summary>
     class BitmapFilter
     {
-        private Bitmap SourceBitmap { get; set; }
-
-        private int MatrixSize { get; set; }
-
-        private int Bias { get; set; } = 0;
-
-        private static void Test()
-        {
-            MessageBox.Show("ThreadTest!");
-        }
         /// <summary>
         /// Wenden den MedianFilter auf eine Bitmap an
         /// </summary>
@@ -34,9 +24,6 @@ namespace MedianFilterProject
         public static Bitmap MedianFilterBitmap(Bitmap sourceBitmap,
                                             int matrixSize)
         {
-            var thread = new Thread(Test);
-            thread.Start();
-
 
             BitmapData sourceData =
                        sourceBitmap.LockBits(new Rectangle(0, 0,
