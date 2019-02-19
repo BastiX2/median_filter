@@ -327,6 +327,8 @@ namespace MedianFilterProject
             catch (ArgumentException)
             {
                 // Beende die Methode, das Programm läuft weiter
+                MessageBox.Show("Bilddatei konnte nicht erstellt werden");
+
                 return;
             }
             // ImageSource basierend auf Bitmap erstellen
