@@ -1,11 +1,8 @@
-﻿using Microsoft.Win32;
-using System.Windows;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Runtime.InteropServices;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
-using System.Threading;
 
 namespace MedianFilterProject
 {
